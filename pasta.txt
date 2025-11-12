@@ -1,2 +1,0 @@
-mientras(a > b){
-imprimir a;}
