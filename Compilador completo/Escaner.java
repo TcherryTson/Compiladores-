@@ -3,6 +3,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Propósito: É o scanner da linguagem, responsável por ler o código-fonte (String) e produzir uma lista de objetos Token.
+ * Detalhes Chave: Usa um mapa estático (palabrasClave) para identificar palavras reservadas. Implementa métodos como
+ * cadena() e numero() para tratar literais. O método principal é escanearTokens().
+ */
+
 public class Escaner {
 
     private final String fuente;
