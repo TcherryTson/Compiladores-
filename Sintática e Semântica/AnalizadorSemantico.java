@@ -3,6 +3,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+/**
+ * Propósito: Realiza a análise semântica da AST (verificação de tipos e escopo), implementando as interfaces
+ * Expr.Visitante<Tipo> e Sentencia.Visitante<Void>.
+ * Detalhes Chave: Utiliza uma pilha (ambitos) de mapas para gerenciar escopos. Implementa lógica de coerção/conversão implícita
+ * (ENTERO para FLOTANTE) e valida que a condição de si e mientras seja do tipo BOOLEANO.
+ */
+    
 public class AnalizadorSemantico implements Expr.Visitante<Tipo>, Sentencia.Visitante<Void> {
 
     private final Stack<Map<String, Tipo>> ambitos = new Stack<>();
@@ -235,3 +242,4 @@ public class AnalizadorSemantico implements Expr.Visitante<Tipo>, Sentencia.Visi
         return resolverExpresion(expr.expresion);
     }
 }
+
