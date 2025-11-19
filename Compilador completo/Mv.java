@@ -3,6 +3,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+/**
+ * Propósito: A Máquina Virtual baseada em pilha (Stack-based Virtual Machine), responsável por executar o bytecode gerado.
+ * Detalhes Chave: Possui uma stack (pilha) para operações e um mapa (globals) para variáveis globais. O método run() é
+ * o loop principal que lê e executa cada OpCode, manipulando a pilha e o ponteiro de instrução (ip).
+ */
+
 public class Mv {
     private Fragmento fragmento;
     private final Stack<Object> stack = new Stack<>();
@@ -149,4 +155,5 @@ public class Mv {
             }
         }
     }
+
 }
