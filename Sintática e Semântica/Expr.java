@@ -1,5 +1,11 @@
 import java.util.List;
 
+/**
+ * Propósito: Classe abstrata que serve como base para todas as Expressões na Árvore de Sintaxe Abstrata (AST).
+ * Detalhes Chave: Implementa o padrão Visitor através da interface aninhada Visitante<R> e o método aceptar.
+ * Contém classes aninhadas para diferentes tipos de expressões, como Binario, Literal, Variable, e Asignar.
+ */
+
 abstract class Expr {
 
     interface Visitante<R> {
@@ -120,4 +126,5 @@ abstract class Expr {
     }
 
     abstract <R> R aceptar(Visitante<R> visitante);
+
 }
