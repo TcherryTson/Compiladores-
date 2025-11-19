@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Propósito: É o parser que constrói a Árvore de Sintaxe Abstrata (AST) a partir da lista de tokens.
+ * Detalhes Chave: Utiliza métodos recursivos descendentes (como expresion(), igualdad(), asignacion()) que
+ * correspondem à precedência de operadores. Lida com a transformação de loops 'para' (for) em 'mientras' (while).
+ */
+
 class AnalizadorSintactico {
     private static class ErrorDeAnalisis extends RuntimeException {
     }
@@ -348,4 +354,5 @@ class AnalizadorSintactico {
     private Token anterior() {
         return tokens.get(actual - 1);
     }
+
 }
