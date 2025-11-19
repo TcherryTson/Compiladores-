@@ -1,5 +1,12 @@
 import java.util.List;
 
+/**
+ * Propósito: Classe abstrata que serve como base para todas as Sentenças (declarações, comandos de controle)
+ * na Árvore de Sintaxe Abstrata (AST).
+ * Detalhes Chave: Define a interface Visitante<R> para o padrão Visitor. Contém classes aninhadas como
+ * Declaracion, Si, Mientras, Bloque e Imprimir.
+ */
+
 abstract class Sentencia {
 
     interface Visitante<R> {
@@ -94,4 +101,5 @@ abstract class Sentencia {
     }
 
     abstract <R> R aceptar(Visitante<R> visitante);
+
 }
