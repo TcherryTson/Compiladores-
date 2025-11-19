@@ -1,6 +1,13 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Propósito: Estrutura de dados que armazena o código de Bytecode gerado, incluindo as instruções, operandos e constantes.
+ * Detalhes Chave: Contém as listas codigo (OpCodes), operandos e constantes (valores literais).
+ * O método patch é crucial para corrigir os offsets de saltos após a geração do código.
+ * Inclui imprimirDisassembly() para visualização e depuração.
+ */
+
 public class Fragmento {
     List<OpCode> codigo = new ArrayList<>();
     List<Object> constantes = new ArrayList<>();
@@ -63,4 +70,5 @@ public class Fragmento {
         }
         System.out.println("===================");
     }
+
 }
