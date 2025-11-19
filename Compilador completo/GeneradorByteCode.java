@@ -1,8 +1,16 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Propósito: É o back-end do compilador. Percorre a Árvore de Sintaxe Abstrata (AST) e emite
+ * as instruções de bytecode para o Fragmento.
+ * Detalhes Chave: Implementa as interfaces Expr.Visitante<Void> e Sentencia.Visitante<Void>.
+ * Gerencia o escopo de variáveis locais e globais usando a classe aninhada CompilerScope.
+ * É responsável por criar os jumps para as sentenças de controle de fluxo (Si, Mientras).
+ */
+
 public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visitante<Void> {
-    private final Fragmento fragmento; // Renomeado de Chunk para Fragmento
+    private final Fragmento fragmento; 
     private CompilerScope scope = new CompilerScope();
 
     private static class CompilerScope {
@@ -19,11 +27,10 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
 
         void beginScope() { scopeDepth++; }
 
-        // CORREÇÃO: Retorna o número de variáveis locais removidas.
         int endScope() {
             scopeDepth--;
             int localsRemoved = 0;
-            // Remove variáveis que saíram do escopo
+        
             while (!locals.isEmpty() && locals.get(locals.size() - 1).profundidad > scopeDepth) {
                 locals.remove(locals.size() - 1);
                 localsRemoved++;
@@ -93,7 +100,6 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
             ejecutar(s);
         }
 
-        // CORREÇÃO APLICADA AQUI: Emite POP para limpar a pilha da MV
         int localsRemoved = scope.endScope();
 
         for (int i = 0; i < localsRemoved; i++) {
@@ -227,4 +233,5 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
         if (expr.operador.tipo == TokenType.EXCLAMACION) fragmento.escribir(OpCode.NOT);
         return null;
     }
+
 }
