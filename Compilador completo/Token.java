@@ -1,4 +1,8 @@
-
+/**
+ * Propósito: Representa uma unidade léxica (token) gerada pelo scanner.
+ * Detalhes Chave: Armazena quatro atributos essenciais: o tipo (TokenType), o lexema (o texto original),
+ * o valor literal (para números e strings), e a linea onde o token foi encontrado.
+ */
 public class Token {
 
     final TokenType tipo;
