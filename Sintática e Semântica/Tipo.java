@@ -1,3 +1,10 @@
+/**
+ * Propósito: Define a enumeração dos tipos de dados primitivos da linguagem,
+ * usados para a verificação de tipos na análise semântica.
+ * Detalhes Chave: Tipos incluídos: ENTERO, FLOTANTE, BOOLEANO, CADENA, NULO, e INDEFINIDO.
+ * O método estático desdeToken(Token tokenTipo) mapeia o token do parser para um tipo semântico.
+ */
+
 public enum Tipo {
     ENTERO,
     FLOTANTE,
@@ -16,4 +23,5 @@ public enum Tipo {
             default: return null;
         }
     }
+
 }
