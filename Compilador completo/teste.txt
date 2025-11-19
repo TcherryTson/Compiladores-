@@ -1,0 +1,5 @@
+entero a = 5;
+entero b = 10;
+mientras( b < 15){
+imprimir (b - 1);
+}
