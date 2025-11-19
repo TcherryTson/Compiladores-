@@ -4,6 +4,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * Propósito: Classe principal e ponto de entrada da aplicação. Orquestra todas as fases do processo
+ * de compilação e execução.
+ * Detalhes Chave: O método ejecutar() encadeia o Escaner, AnalizadorSintactico, AnalizadorSemantico e a Mv.
+ * Lida com o relatório de erros através de flags estáticas (tuvoError, tuvoErrorRuntime).
+ */
+
 public class Lox {
 
     static boolean tuvoError = false;
@@ -82,4 +89,5 @@ public class Lox {
         System.err.println("[línea " + linea + "] Error" + donde + ": " + mensaje);
         tuvoError = true;
     }
+
 }
