@@ -3,7 +3,6 @@
  * Detalhes Chave: Utiliza métodos recursivos descendentes (como expresion(), igualdad(), asignacion()) que
  * correspondem à precedência de operadores. Lida com a transformação de loops 'para' (for) em 'mientras' (while).
  */
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -353,5 +352,3 @@ class AnalizadorSintactico {
         return tokens.get(actual - 1);
     }
 }
-
-
