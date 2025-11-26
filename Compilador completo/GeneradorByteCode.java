@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visitante<Void> {
-    private final Fragmento fragmento; 
+    private final Fragmento fragmento; // Renomeado de Chunk para Fragmento
     private CompilerScope scope = new CompilerScope();
 
     private static class CompilerScope {
@@ -30,7 +30,6 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
         int endScope() {
             scopeDepth--;
             int localsRemoved = 0;
-        
             while (!locals.isEmpty() && locals.get(locals.size() - 1).profundidad > scopeDepth) {
                 locals.remove(locals.size() - 1);
                 localsRemoved++;
@@ -59,7 +58,7 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
         for (Sentencia sent : sentencias) {
             ejecutar(sent);
         }
-        fragmento.escribir(OpCode.RETORNAR);
+        fragmento.escrever(OpCode.RETORNAR);
     }
 
     private void ejecutar(Sentencia sentencia) {
@@ -80,7 +79,7 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
         } else {
 
             int idx = fragmento.agregarConstante(null);
-            fragmento.escribir(OpCode.CONSTANTE, idx);
+            fragmento.escrever(OpCode.CONSTANTE, idx);
         }
 
 
@@ -88,7 +87,7 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
             scope.addLocal(sent.nombre.lexema);
         } else {
             int nameIdx = fragmento.agregarConstante(sent.nombre.lexema);
-            fragmento.escribir(OpCode.DEFINIR_GLOBAL, nameIdx);
+            fragmento.escrever(OpCode.DEFINIR_GLOBAL, nameIdx);
         }
         return null;
     }
@@ -103,7 +102,7 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
         int localsRemoved = scope.endScope();
 
         for (int i = 0; i < localsRemoved; i++) {
-            fragmento.escribir(OpCode.POP);
+            fragmento.escrever(OpCode.POP);
         }
         return null;
     }
@@ -113,12 +112,12 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
         avaliar(sent.condicion);
 
 
-        int thenJump = fragmento.escribir(OpCode.SALTAR_SI_FALSO, -1);
+        int thenJump = fragmento.escrever(OpCode.SALTAR_SI_FALSO, -1);
 
 
         ejecutar(sent.ramaSi);
 
-        int elseJump = fragmento.escribir(OpCode.SALTAR, -1);
+        int elseJump = fragmento.escrever(OpCode.SALTAR, -1);
 
 
         fragmento.patch(thenJump, fragmento.codigo.size());
@@ -139,11 +138,11 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
 
         avaliar(sent.condicion);
 
-        int exitJump = fragmento.escribir(OpCode.SALTAR_SI_FALSO, -1);
+        int exitJump = fragmento.escrever(OpCode.SALTAR_SI_FALSO, -1);
 
         ejecutar(sent.cuerpo);
 
-        fragmento.escribir(OpCode.LOOP, loopStart);
+        fragmento.escrever(OpCode.LOOP, loopStart);
 
         fragmento.patch(exitJump, fragmento.codigo.size());
 
@@ -153,7 +152,7 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
     @Override
     public Void visitarSentenciaImprimir(Sentencia.Imprimir sent) {
         avaliar(sent.expresion);
-        fragmento.escribir(OpCode.IMPRIMIR);
+        fragmento.escrever(OpCode.IMPRIMIR);
         return null;
     }
 
@@ -162,7 +161,7 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
 
         avaliar(sent.expresion);
 
-        fragmento.escribir(OpCode.POP);
+        fragmento.escrever(OpCode.POP); 
 
         return null;
     }
@@ -175,13 +174,13 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
         avaliar(expr.derecha);
 
         switch (expr.operador.tipo) {
-            case MAS:       fragmento.escribir(OpCode.SUMAR); break;
-            case MENOS:     fragmento.escribir(OpCode.RESTAR); break;
-            case ASTERISCO: fragmento.escribir(OpCode.MULTIPLICAR); break;
-            case BARRA:     fragmento.escribir(OpCode.DIVIDIR); break;
-            case IGUAL_IGUAL: fragmento.escribir(OpCode.IGUAL); break;
-            case MAYOR:     fragmento.escribir(OpCode.MAYOR); break;
-            case MENOR:     fragmento.escribir(OpCode.MENOR); break;
+            case MAS:       fragmento.escrever(OpCode.SUMAR); break;
+            case MENOS:     fragmento.escrever(OpCode.RESTAR); break;
+            case ASTERISCO: fragmento.escrever(OpCode.MULTIPLICAR); break;
+            case BARRA:     fragmento.escrever(OpCode.DIVIDIR); break;
+            case IGUAL_IGUAL: fragmento.escrever(OpCode.IGUAL); break;
+            case MAYOR:     fragmento.escrever(OpCode.MAYOR); break;
+            case MENOR:     fragmento.escrever(OpCode.MENOR); break;
             default: throw new RuntimeException("Operador desconhecido em bytecode");
         }
         return null;
@@ -190,7 +189,7 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
     @Override
     public Void visitarExprLiteral(Expr.Literal expr) {
         int idx = fragmento.agregarConstante(expr.valor);
-        fragmento.escribir(OpCode.CONSTANTE, idx);
+        fragmento.escrever(OpCode.CONSTANTE, idx);
         return null;
     }
 
@@ -198,10 +197,10 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
     public Void visitarExprVariable(Expr.Variable expr) {
         int arg = scope.resolveLocal(expr.nombre.lexema);
         if (arg != -1) {
-            fragmento.escribir(OpCode.LEER_LOCAL, arg);
+            fragmento.escrever(OpCode.LEER_LOCAL, arg);
         } else {
             arg = fragmento.agregarConstante(expr.nombre.lexema);
-            fragmento.escribir(OpCode.LEER_GLOBAL, arg);
+            fragmento.escrever(OpCode.LEER_GLOBAL, arg);
         }
         return null;
     }
@@ -212,10 +211,10 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
 
         int arg = scope.resolveLocal(expr.nombre.lexema);
         if (arg != -1) {
-            fragmento.escribir(OpCode.ASIGNAR_LOCAL, arg);
+            fragmento.escrever(OpCode.ASIGNAR_LOCAL, arg);
         } else {
             arg = fragmento.agregarConstante(expr.nombre.lexema);
-            fragmento.escribir(OpCode.ASIGNAR_GLOBAL, arg);
+            fragmento.escrever(OpCode.ASIGNAR_GLOBAL, arg);
         }
         return null;
     }
@@ -229,9 +228,10 @@ public class GeneradorByteCode implements Expr.Visitante<Void>, Sentencia.Visita
     }
     @Override public Void visitarExprUnario(Expr.Unario expr) {
         avaliar(expr.derecha);
-        if (expr.operador.tipo == TokenType.MENOS) fragmento.escribir(OpCode.NEGATIVO);
-        if (expr.operador.tipo == TokenType.EXCLAMACION) fragmento.escribir(OpCode.NOT);
+        if (expr.operador.tipo == TokenType.MENOS) fragmento.escrever(OpCode.NEGATIVO);
+        if (expr.operador.tipo == TokenType.EXCLAMACION) fragmento.escrever(OpCode.NOT);
         return null;
     }
-
 }
+}
+
