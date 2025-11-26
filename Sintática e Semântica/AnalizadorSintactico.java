@@ -7,6 +7,9 @@ import java.util.List;
  * correspondem à precedência de operadores. Lida com a transformação de loops 'para' (for) em 'mientras' (while).
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 class AnalizadorSintactico {
     private static class ErrorDeAnalisis extends RuntimeException {
     }
@@ -39,14 +42,15 @@ class AnalizadorSintactico {
             if (coincidir(TokenType.PARA)) return sentenciaPara();
             if (coincidir(TokenType.LLAVE_IZQUIERDA)) return new Sentencia.Bloque(bloque());
 
-
-            throw error(ver(), "Declaración inválida.");
+            // MODIFICAÇÃO CHAVE: Assumir que o comando é uma Sentença de Expressão (Atribuição) se não for outro tipo.
+            return sentenciaDeExpresion(); 
 
         } catch (ErrorDeAnalisis error) {
             sincronizar();
             return null;
         }
     }
+// ... (restante da classe inalterado)
 
     private Sentencia declaracionDeTipo() {
 
@@ -123,7 +127,7 @@ class AnalizadorSintactico {
         if (!verificar(TokenType.PUNTO_Y_COMA)) {
             condicion = expresion();
         }
-        consumir(TokenType.PUNTO_Y_COMA, "Se esperaba ';' después de la condición del ciclo.");
+        consumir(TokenType.PUNTO_Y_COMA, "Se esperaba ';' después de la condición do ciclo.");
 
         Expr incremento = null;
         if (!verificar(TokenType.PARENTESIS_DERECHO)) {
@@ -354,5 +358,6 @@ class AnalizadorSintactico {
     private Token anterior() {
         return tokens.get(actual - 1);
     }
-
 }
+}
+
