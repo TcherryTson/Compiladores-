@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Propósito: É o parser que constrói a Árvore de Sintaxe Abstrata (AST) a partir da lista de tokens.
  * Detalhes Chave: Utiliza métodos recursivos descendentes (como expresion(), igualdad(), asignacion()) que
@@ -41,8 +38,6 @@ class AnalizadorSintactico {
             if (coincidir(TokenType.MIENTRAS)) return sentenciaMientras();
             if (coincidir(TokenType.PARA)) return sentenciaPara();
             if (coincidir(TokenType.LLAVE_IZQUIERDA)) return new Sentencia.Bloque(bloque());
-
-            // MODIFICAÇÃO CHAVE: Assumir que o comando é uma Sentença de Expressão (Atribuição) se não for outro tipo.
             return sentenciaDeExpresion(); 
 
         } catch (ErrorDeAnalisis error) {
@@ -50,7 +45,6 @@ class AnalizadorSintactico {
             return null;
         }
     }
-// ... (restante da classe inalterado)
 
     private Sentencia declaracionDeTipo() {
 
@@ -127,7 +121,7 @@ class AnalizadorSintactico {
         if (!verificar(TokenType.PUNTO_Y_COMA)) {
             condicion = expresion();
         }
-        consumir(TokenType.PUNTO_Y_COMA, "Se esperaba ';' después de la condición do ciclo.");
+        consumir(TokenType.PUNTO_Y_COMA, "Se esperaba ';' después de la condición del ciclo.");
 
         Expr incremento = null;
         if (!verificar(TokenType.PARENTESIS_DERECHO)) {
@@ -359,5 +353,5 @@ class AnalizadorSintactico {
         return tokens.get(actual - 1);
     }
 }
-}
+
 
